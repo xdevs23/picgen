@@ -55,7 +55,7 @@ def main():
 	openInViewer = saveTo is None or args.open_in_viewer
 
 	print()
-	print("Input size: %s x %s" % (xInputSize, xInputSize))
+	print("Input size: %s x %s" % (xInputSize, yInputSize))
 	print("Output size: %s x %s" % (xOutputSize, yOutputSize))
 	print("Colors per pixel: %s" % colorsPerPixel)
 	print("Mode: %s" % mode)
