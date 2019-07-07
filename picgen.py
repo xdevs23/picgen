@@ -65,7 +65,6 @@ def main():
 	print()
 
 	# Create a y,x,d array of 8 bit unsigned integers
-	data = np.zeros( (yOutputSize, xOutputSize, colorsPerPixel), dtype=np.uint8 )
 	downscale = np.zeros( (yInputSize, xInputSize, colorsPerPixel), dtype=np.uint8 )
 
 	for y in range(len(downscale)):
@@ -80,19 +79,29 @@ def main():
 
 	print()
 
-	print("Upscaling...")
+	data = downscale
 
-	upscaleFactorX = int(len(data[0]) / len(downscale[0]))
-	upscaleFactorY = int(len(data) / len(downscale))
+	if xInputSize != xOutputSize or yInputSize != yOutputSize:
+		data = np.zeros( (yOutputSize, xOutputSize, colorsPerPixel), dtype=np.uint8 )
+		print("Upscaling...")
 
-	print("  Upscale factor X: %s" % upscaleFactorX)
-	print("  Upscale factor Y: %s" % upscaleFactorY)
+		upscaleFactorX = len(data[0]) / len(downscale[0])
+		upscaleFactorY = len(data) / len(downscale)
 
-	for y in range(len(data)):
-	    sys.stdout.write("\rUpscaling %s out of %s" % (y + 1, len(data)))
-	    sys.stdout.flush()
-	    for x in range(len(data[y])):
-	        data[y,x] = downscale[math.floor(y / upscaleFactorY)][math.floor(x / upscaleFactorX)]
+		print("  Upscale factor X: %s" % upscaleFactorX)
+		print("  Upscale factor Y: %s" % upscaleFactorY)
+
+		for y in range(len(data)):
+			sys.stdout.write("\rUpscaling %s out of %s" % (y + 1, len(data)))
+			sys.stdout.flush()
+			for x in range(len(data[y])):
+				yIx = math.floor(y / upscaleFactorY)
+				# Check if we're still in bounds
+				if yIx > len(downscale): break
+				xIx = math.floor(x / upscaleFactorX)
+				# Check if we're still in bounds
+				if xIx > len(downscale[yIx]): break
+				data[y,x] = downscale[yIx][xIx]
 
 	print()
 
