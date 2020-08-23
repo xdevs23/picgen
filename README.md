@@ -1,0 +1,3 @@
+# picgen
+
+Generates random images
